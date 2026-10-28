@@ -6,8 +6,19 @@ import heapq
 from dataclasses import dataclass
 from typing import Protocol
 
-from vega.music.plan import StrumPlan
 from vega.midi.windows_ports import output_signature
+
+
+class TimedNote(Protocol):
+    note: int
+    velocity: int
+    offset: float
+    duration: float
+
+
+class NotePlan(Protocol):
+    @property
+    def notes(self) -> tuple[TimedNote, ...]: ...
 
 
 @dataclass(frozen=True)
@@ -157,8 +168,9 @@ class MidiOutput:
     cut off a retrigger. Port/channel changes cancel queued events and panic.
     """
 
-    def __init__(self, backend: MidiBackend | None = None) -> None:
+    def __init__(self, backend: MidiBackend | None = None, *, default_port: str = "Vega Guitar") -> None:
         self.backend = backend or MidoBackend()
+        self.default_port = default_port
         self.port_names: tuple[str, ...] = ()
         self.port_name = ""
         self.status = "Not connected · select an existing MIDI output"
@@ -169,10 +181,11 @@ class MidiOutput:
         self._next_scan = 0.0
         self.preferred_port = ""
 
-    def restore(self, saved_port: str) -> None:
-        """Startup only: exact Vega Guitar wins; never pick an arbitrary synth."""
+    def restore(self, saved_port: str, *, prefer_default: bool = True) -> None:
+        """Startup only: exact app port wins; never pick an arbitrary synth."""
         self.refresh()
-        self.preferred_port = "Vega Guitar" if "Vega Guitar" in self.port_names else saved_port
+        self.preferred_port = (self.default_port if self.default_port in self.port_names
+                               and (prefer_default or not saved_port) else saved_port)
         if self.preferred_port in self.port_names:
             self.connect(self.preferred_port)
         elif self.preferred_port:
@@ -225,7 +238,7 @@ class MidiOutput:
             self.panic()
             self.channel = channel
 
-    def submit(self, plan: StrumPlan, now: float) -> None:
+    def submit(self, plan: NotePlan, now: float) -> None:
         if not self.port_name:
             return
         for note in plan.notes:

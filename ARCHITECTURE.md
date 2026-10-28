@@ -231,7 +231,9 @@ The release uses pygame's bundled PortMidi. Optional `.[rtmidi]` is a developer
 alternative; source builds may need C++ tools. Installed Vega needs no compiler.
 Exact bundled versions are recorded in `licenses/SOURCES.json`.
 
-Startup prefers an exact “Vega Guitar” output, otherwise the saved selection.
+The desktop starts its native “Vega Guitar Send” route for a fresh/default setup;
+an explicitly saved external MIDI output is retained. The generic MidiOutput
+adapter also retains the legacy exact-default preference for diagnostic callers.
 Users may explicitly select/disconnect an existing output. Channel is 1–16 in the GUI,
 converted to 0–15 on the wire. Note and velocity ranges are validated. A priority
 queue sends note-on/off; active `(channel,note)` entries own generation tokens.
@@ -257,10 +259,20 @@ as a preference, but only an explicit Refresh/selection retries it. There is no
 fallback to an arbitrary output. Drivers that conceal inventory changes may
 still require Refresh. MIDI problems do not stop input/preview.
 
-Native endpoint hosting is not implemented. A running Windows MIDI service does
-not make Vega an endpoint publisher. Same-PC DAW routing needs an external
-loopback, configured optionally after installation. No ports is ordinary state,
-displayed as “No MIDI outputs available”.
+Native routing is implemented in `vega.midi.native_route` through the installed
+Windows MIDI Service's system COM transport. Each app has a deterministic per-user
+association and two endpoints: application **Send** and DAW input. The service
+creates the endpoints; no extra driver, SDK runtime or routing process is bundled.
+Updated Windows 11 25H2 or later is required and checked by Setup. App-owned route
+metadata allows verified reuse after relaunch; the route is recreated after a
+service/Windows restart. Other MIDI endpoints are never removed.
+
+`DawConnection` selects the Send port and manages Add to FL Studio / Add to MPC.
+Host profiles are embedded in the app. FL uses supportedDevices metadata and
+passes notes unchanged; MPC uses its ProgramData map library and narrowly updated
+input preferences with a first-edit backup. Open DAWs are not terminated. Setup
+waits for the user to close one, applies its profile, then reopens it. A fresh
+FL handshake reports controller attachment and note receipt without consuming MIDI.
 
 ## Runtime and desktop lifecycle
 
@@ -374,7 +386,7 @@ optional muted-start preview; existing-port MIDI; GUI-independent runtime.
 
 Create/Share and LS/RS are unsupported. Concurrent game access, latency under
 load, audible preview and live DAW/VST release require physical tests. No driver,
-bends, slides, capo, tuning UI, updater, cloud service or native endpoint is
+bends, slides, capo, tuning UI, updater or cloud service is
 included. Internal `bank` names are set indexes, not another arithmetic-bank
 engine; renaming them would add churn without changing ownership.
 

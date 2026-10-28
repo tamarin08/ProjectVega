@@ -26,11 +26,14 @@ def fetch(url: str, cache: Path) -> bytes:
     return data
 
 
-def collect(destination: Path) -> None:
+def collect(destination: Path, *, app: str = "Vega") -> None:
     notices = destination / "licenses"
     notices.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(ROOT / "packaging/licenses/Windows-MIDI-Services.txt", notices / "Windows-MIDI-Services.txt")
     cache = ROOT / "build" / "license-cache"
-    manifest = []
+    manifest = [{"upstream": "microsoft/MIDI", "tag": "inbox-preview-11",
+                 "source": "https://github.com/microsoft/MIDI/tree/inbox-preview-11",
+                 "use": "System COM interface definitions and JSON contract; no Microsoft API binary is bundled"}]
     packages = ["mido", "packaging", "pygame", "PySide6_Essentials", "shiboken6", "pyinstaller", "setuptools"]
     try:
         importlib.metadata.distribution("python-rtmidi")
@@ -83,10 +86,17 @@ def collect(destination: Path) -> None:
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         list(pool.map(copy_notice, jobs))
     (notices / "SOURCES.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    for name in ("LICENSE", "README.md", "ARCHITECTURE.md", "THIRD_PARTY_NOTICES.md"):
+    for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
         shutil.copyfile(ROOT / name, destination / name)
     (destination / "docs").mkdir(exist_ok=True)
-    for name in ("RELEASE_INTEGRATION.md", "CLEAN_WINDOWS_TEST.md"):
+    if app == "Edmond":
+        shutil.copyfile(ROOT / "docs" / "EDMOND.md",destination / "README.md")
+        documents = ("EDMOND_VERIFICATION.md", "FINAL_RELEASE.md")
+    else:
+        shutil.copyfile(ROOT / "README.md",destination / "README.md")
+        shutil.copyfile(ROOT / "ARCHITECTURE.md",destination / "ARCHITECTURE.md")
+        documents = ("RELEASE_INTEGRATION.md", "CLEAN_WINDOWS_TEST.md", "VEGA.md", "FINAL_RELEASE.md")
+    for name in documents:
         shutil.copyfile(ROOT / "docs" / name, destination / "docs" / name)
     print(f"Collected {len(jobs)} upstream notices plus installed dependency licenses into {notices}")
 

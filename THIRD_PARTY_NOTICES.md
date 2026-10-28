@@ -1,5 +1,11 @@
 # Distribution notices
 
+Native MIDI routing calls the Windows MIDI Service already installed in supported
+Windows 11 releases. Its COM interface identifiers and configuration contract are
+referenced from [Microsoft's MIT-licensed MIDI source](https://github.com/microsoft/MIDI/tree/inbox-preview-11).
+The notice is included as `licenses/Windows-MIDI-Services.txt`. Microsoft SDK/API
+binaries, preview runtimes, drivers and tools are not bundled with this app.
+
 Project Vega source is released under the **Unlicense**, in `LICENSE`.
 That does not relicense the third-party components bundled with Vega.
 There is no Vega EULA or license-acceptance step in Setup.

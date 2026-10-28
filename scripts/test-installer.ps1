@@ -65,6 +65,10 @@ foreach ($tasks in @('', 'desktopicon')) {
     if (-not $tasks) { $arguments += '--smoke-test-edit-set' }
     Invoke-ValidationProcess (Join-Path $install 'Vega.exe') $arguments
     $smoke = Get-Content -LiteralPath $report -Raw | ConvertFrom-Json
+    $nativeReport = Join-Path $testRoot $(if ($tasks) { 'upgraded-native-midi.json' } else { 'fresh-native-midi.json' })
+    Invoke-ValidationProcess (Join-Path $install 'Vega.exe') @('--native-midi-report', ('"' + $nativeReport + '"'))
+    $native = Get-Content -LiteralPath $nativeReport -Raw | ConvertFrom-Json
+    if (-not ($native.frozen -and $native.native_available -and $native.connected)) { throw 'Packaged native MIDI setup failed.' }
     if (-not ($smoke.frozen -and $smoke.gui_initialized -and $smoke.muted -and $smoke.icon_present) -or $smoke.connected -or $smoke.console_attached) {
         throw 'Installed native startup without a selected controller failed.'
     }

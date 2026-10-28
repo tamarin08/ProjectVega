@@ -12,7 +12,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--smoke-test-report", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--smoke-test-settings", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--smoke-test-edit-set", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--native-midi-report", type=Path, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    if args.native_midi_report:
+        from vega.midi.diagnostics import write_native_report
+        from vega.midi.native_route import VEGA_ROUTE
+        return write_native_report(args.native_midi_report, VEGA_ROUTE)
     if (args.smoke_test_settings or args.smoke_test_edit_set) and not args.smoke_test_report:
         parser.error("Smoke settings/edit flags require --smoke-test-report")
     try:
@@ -58,11 +63,16 @@ def main(argv: list[str] | None = None) -> int:
     preview = PreviewSynth(PygameAudioBackend(), settings.preview_volume)
     runtime = VegaRuntime(DesktopInputSource(device_index=args.device_index), preview, settings,
                           clock=time.perf_counter)
+    from vega.midi.native_route import VEGA_ROUTE
+    runtime.midi.default_port = VEGA_ROUTE.send_name
     window = None
     try:
-        runtime.midi.restore(settings.midi_port)
+        runtime.midi.restore(settings.midi_port, prefer_default=False)
         window = VegaWindow(runtime, store)
         window.show()
+        if not args.smoke_test_report and settings.midi_port in ("", VEGA_ROUTE.send_name):
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(0, window.native_connection.connect_native)
         if app.platformName() == "windows":
             use_dark_window_frame(int(window.winId()))
         if args.smoke_test_report:

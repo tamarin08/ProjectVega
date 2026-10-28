@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MidiLearnMap_ Manufacturer="Project Edmond" Version="0.1">
+  <device>
+    <Input UnixPortName="Edmond Drums" WindowsPortName="Edmond Drums" />
+    <Output UnixPortName="Edmond Drums" WindowsPortName="Edmond Drums" />
+  </device>
+  <pairing>
+    <Target_ Target_control="0" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="36" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="1" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="37" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="2" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="38" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="3" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="39" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="4" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="40" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="5" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="41" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="6" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="42" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="7" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="43" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="8" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="44" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="9" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="45" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="10" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="46" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="11" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="47" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="12" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="48" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="13" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="49" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="14" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="50" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+  <pairing>
+    <Target_ Target_control="15" />
+    <Mapping_ Mapping_type="1" Mapping_channel="10" Mapping_data1="51" Mapping_control="4" Mapping_reverse="0" />
+  </pairing>
+</MidiLearnMap_>

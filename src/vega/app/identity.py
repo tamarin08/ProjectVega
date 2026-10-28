@@ -4,7 +4,7 @@ from pathlib import Path
 
 APP_NAME = "Vega"
 APP_DESCRIPTION = "Vega Guitar Controller"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 APP_USER_MODEL_ID = "ProjectVega.Vega"
 EXECUTABLE_NAME = "Vega.exe"
 

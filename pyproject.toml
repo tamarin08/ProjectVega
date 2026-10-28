@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "project-vega"
-version = "1.0.0"
+version = "1.0.1"
 description = "Vega Guitar Controller"
 license = "Unlicense"
 license-files = ["LICENSE"]
@@ -21,9 +21,11 @@ packaging = ["PyInstaller>=6.16,<7"]
 vega-inspect-titan = "vega.diagnostics.inspect_titan:main"
 vega-inspect-gestures = "vega.diagnostics.inspect_gestures:main"
 vega = "vega.app.__main__:main"
+edmond = "edmond.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
 "vega.app" = ["resources/*.ico", "resources/*.svg"]
+"edmond" = ["resources/*.ico", "resources/*.xmm"]

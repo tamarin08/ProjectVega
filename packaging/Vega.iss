@@ -20,7 +20,7 @@ AppId={#AppIdentity}
 AppName=Vega
 AppVersion={#AppVersion}
 AppVerName=Vega {#AppVersion}
-AppSupportURL=https://github.com/joseph2008mercado-wq/ProjectVega
+AppSupportURL=https://github.com/tamarin08/ProjectVega
 VersionInfoDescription=Vega Guitar Controller
 VersionInfoProductName=Vega
 VersionInfoVersion={#AppVersion}
@@ -29,7 +29,7 @@ DefaultDirName={localappdata}\Programs\{#InstallFolder}
 PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
-MinVersion=10.0.22000
+MinVersion=10.0.26200
 WizardStyle=classic
 WizardSizePercent=100
 WizardImageFile=..\build\installer-art\welcome.bmp
@@ -254,6 +254,12 @@ var
   Managed: Boolean;
 begin
   Result := '';
+  if not FileExists(ExpandConstant('{sys}\Midi2.MidiSrvTransport.dll')) or
+     not RegKeyExists(HKLM, 'SYSTEM\CurrentControlSet\Services\midisrv') then
+  begin
+    Result := 'Updated Windows 11 25H2 or later with Windows MIDI Service is required. Install Windows updates, then run Setup again.';
+    Exit;
+  end;
   Managed := RegQueryStringValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{#AppIdentity}_is1',
                                  'InstallLocation', ExistingDirectory);
   Managed := Managed and (CompareText(AddBackslash(ExistingDirectory), AddBackslash(ExpandConstant('{app}'))) = 0);

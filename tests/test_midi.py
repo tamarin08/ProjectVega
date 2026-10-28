@@ -29,6 +29,14 @@ class FakeMidi:
 
 
 class MidiTests(unittest.TestCase):
+    def test_desktop_saved_external_output_survives_native_default(self):
+        backend = FakeMidi()
+        backend.names = ("Vega Guitar Send", "External device")
+        output = MidiOutput(backend, default_port="Vega Guitar Send")
+        output.restore("External device", prefer_default=False)
+        self.assertEqual(output.port_name, "External device")
+        output.close()
+
     def test_rapid_strums_eventually_pair_every_on_and_off(self):
         peak = 0
         for index in range(2000):
