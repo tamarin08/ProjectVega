@@ -53,7 +53,8 @@ class IdentityTests(unittest.TestCase):
             # PyInstaller puts __file__ and data in the same package structure.
             frozen_file = Path(directory) / "_internal" / "vega" / "app" / "identity.py"
             with patch.object(identity, "__file__", str(frozen_file)):
-                self.assertEqual(identity.icon_path(), frozen_file.parent / "resources" / "vega.ico")
+                # Windows CI may spell TEMP with an 8.3 username alias.
+                self.assertEqual(identity.icon_path(), frozen_file.resolve().parent / "resources" / "vega.ico")
 
     def test_packaging_smoke_does_not_save_personal_settings(self):
         with tempfile.TemporaryDirectory() as directory:
